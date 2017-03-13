@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+
+    <!--侧滑栏,每个Activity都需要,如何抽象出来呢???-->
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/colorPageBg"
+        android:clickable="true"
+        android:fitsSystemWindows="true"/>
+
+    <!--不在这里初始化了,改在代码中进行初始化-->
+    <!--app:headerLayout="@layout/nav_header_main"-->
+    <!--app:menu="@menu/activity_main_drawer"-->
+
+
+    <include
+        android:id="@+id/include_pic"
+        layout="@layout/content_picture"/>
+
+
+</android.support.v4.widget.DrawerLayout>
