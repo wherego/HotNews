@@ -6,8 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.zx.hotnews.engine.picture.DetailPictureActivity">
-<ImageView
-    android:id="@+id/detail_img"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+
+    <com.zx.hotnews.widget.ZoomImageView
+        android:id="@+id/detail_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </RelativeLayout>
