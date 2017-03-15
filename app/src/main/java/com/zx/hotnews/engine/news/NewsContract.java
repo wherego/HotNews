@@ -25,6 +25,7 @@ public class NewsContract {
     }
 
     interface Presenter extends BasePresenter {
-        void getNews(int page);
+        void getNewsFromNet(int page);
+        void getNewsFromCache(String cacheName);
     }
 }

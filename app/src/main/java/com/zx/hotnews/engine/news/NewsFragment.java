@@ -15,6 +15,7 @@ import com.zx.hotnews.base.BaseFragment;
 import com.zx.hotnews.bean.news.AndroidNewsBean;
 import com.zx.hotnews.rx.RxBus;
 import com.zx.hotnews.rx.RxCodeConstants;
+import com.zx.hotnews.utils.Constants;
 import com.zx.hotnews.utils.TimeUtil;
 
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class NewsFragment extends BaseFragment implements NewsContract.View {
 
             @Override
             public void onClick(View v) {
-                mPresenter.getNews(mPage);
+                mPresenter.getNewsFromCache(Constants.NEWS_ALL);
             }
         });
 

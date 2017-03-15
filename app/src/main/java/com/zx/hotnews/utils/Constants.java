@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 
 public class Constants {
-    // 首页每日推荐缓存
+    /*// 首页每日推荐缓存
     public static String GANK_ALL = "gank_all";
     // 安卓数据
     public static String GANK_ANDROID = "gank_android";
@@ -22,7 +22,10 @@ public class Constants {
     // 保存每日推荐recyclerview内容
     public static String EVERYDAY_CONTENT = "everyday_content";
     // 缓存妹子
-    public static String GANK_MEIZI = "gank_meizi";
+    public static String GANK_MEIZI = "gank_meizi";*/
+
+    // 新闻缓存的Key
+    public static String NEWS_ALL = "news_all";
 
 
     // 电影栏头部的图片
