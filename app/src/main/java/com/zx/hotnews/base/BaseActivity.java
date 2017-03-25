@@ -1,11 +1,9 @@
 package com.zx.hotnews.base;
 
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.view.View;
 
 /**
  * Created by zhangxin on 2016/10/23.

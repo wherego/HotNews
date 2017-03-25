@@ -43,31 +43,14 @@
                 android:textSize="17sp"
                 android:textStyle="bold"/>
 
-            <!--导演-->
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginTop="2dp"
-                android:orientation="horizontal">
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="导演："/>
-
-                    <View
-                        android:layout_width="50dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="2dp"
-                        android:background="@color/colorTheme"/>
-
-                </LinearLayout>
+                    android:text="导演："/>
 
                 <TextView
                     android:id="@+id/tv_one_directors"
@@ -75,8 +58,14 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"/>
+
             </LinearLayout>
 
+            <View
+                android:layout_width="50dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="2dp"
+                android:background="@color/colorTheme"/>
             <!--主演-->
 
             <LinearLayout

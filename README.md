@@ -1,5 +1,11 @@
 [TOC]
 
+**重要:**本应用作为MVP的练手项目,已经完成基本的逻辑,是一个可用的版本,但是最近想重构该项目,采用单Activity+多Fragment的结构,并添加一些新的功能,新项目地址=>[FreeTime](https://github.com/zachaxy/FreeTime),欢迎关注
+
+
+
+
+
 # 简介
 
 本款软件是一个平时练手的项目,整体采用的MVP架构,并结合`RxJava`+`Retrofit`+`Glide`开源框架的一款新闻客户端.整个应用的业务大致分为三个模块:
@@ -94,6 +100,16 @@ MVP的核心是让M和V分离,不让其直接产生交互,所以使用Presenter�
 同时在Presenter中要分别持有V和M的引用,这样就可以由P来统一调度管理V和M之间的通信.
 
 
+# 效果图
+- **部分效果图**
+
+<img width="173" height=“274” src="https://github.com/zachaxy/HotNews/blob/master/screenshots/p1.jpg"></img>
+<img width="173" height=“274” src="https://github.com/zachaxy/HotNews/blob/master/screenshots/p2.jpg"></img>
+<img width="173" height=“274” src="https://github.com/zachaxy/HotNews/blob/master/screenshots/p3.jpg"></img>
+<img width="173" height=“274” src="https://github.com/zachaxy/HotNews/blob/master/screenshots/p4.jpg"></img>
+<img width="173" height=“274” src="https://github.com/zachaxy/HotNews/blob/master/screenshots/p5.jpg"></img>
+
+ 
 
 # TODO
 
