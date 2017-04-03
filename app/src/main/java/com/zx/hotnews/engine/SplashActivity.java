@@ -81,7 +81,7 @@ public class SplashActivity extends AppCompatActivity {
         //跳转页面还是用了动画,进入的动画是缩小,退出的界面是out;
         //Activity切换效果,在startActivity(intent)之后调该方法即可;
         // 可能会产生不起作用的情况:在android2.0一下,这个情况不用担心,已经不再对4.0一下做兼容了;要么就是该方法的调用位置不对,不能在嵌套的子Activity中;
-        overridePendingTransition(R.anim.screen_zoom_in, R.anim.screen_zoom_out);
+        overridePendingTransition(R.anim.screen_zoom_in, R.anim.screen_zoom_out);  //我的新作品中颠倒个个
         finish();
 //        isEnter = true;
     }
