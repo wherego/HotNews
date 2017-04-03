@@ -4,18 +4,25 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.transition.ArcMotion;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +38,9 @@ import com.zx.hotnews.utils.CommonUtils;
 import com.zx.hotnews.utils.StatusBarUtil;
 import com.zx.hotnews.utils.StatusBarUtils;
 import com.zx.hotnews.utils.StringFormatUtil;
+import com.zx.hotnews.widget.CustomChangeBounds;
+
+import org.w3c.dom.Text;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import rx.Observer;
@@ -50,11 +60,22 @@ public class MovieDetailActivity extends AppCompatActivity {
     // 滑动多少距离后标题不透明
     private int slidingDistance;
 
+    private ImageView imgItemBg;
+    private ImageView imgOnePhoto;
+    private TextView tvOneRattingRate;
+    private TextView tvOneRatingNumber;
+    private TextView tvOneDirector;
+    private TextView tvOneCasts;
+    private TextView tvOneGenres;
+
     private TextView tvOneDay;
     private TextView tvOneCity;
     private RecyclerView rvCast;
     private Toolbar tbBaseTitle;
     private ImageView ivBaseTitlebarBg;
+
+    private TextView tvOneTitle;
+    private TextView tvOneSummary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,19 +85,51 @@ public class MovieDetailActivity extends AppCompatActivity {
         initView();
 
 
+        // 设置toolbar
+        setToolBar();
+
+
         if (getIntent() != null) {
             subjectsBean = (SubjectsBean) getIntent().getSerializableExtra("bean");
+            initHeader();
         }
 
         initSlideShapeTheme(setHeaderImgUrl(), setHeaderImageView());
 
-        setTitle(subjectsBean.getTitle());
-        setSubTitle(String.format("主演：%s", StringFormatUtil.formatName(subjectsBean.getCasts())));
+        setTitles();
 
         loadMovieDetail();
     }
 
+    private void initHeader() {
+        Glide.with(imgOnePhoto.getContext())
+                .load(subjectsBean.getImages().getLarge())
+                .crossFade(500)
+                .override((int) CommonUtils.getDimens(R.dimen.movie_detail_width), (int) CommonUtils.getDimens(R
+                        .dimen.movie_detail_height))
+                .placeholder(R.drawable.img_default_meizi)
+                .error(R.drawable.img_default_meizi)
+                .into(imgOnePhoto);
+
+        tvOneRattingRate.setText("评分:" + subjectsBean.getRating().getAverage());
+        tvOneRatingNumber.setText(subjectsBean.getCollect_count() + "人评");
+        tvOneDirector.setText(StringFormatUtil.formatName(subjectsBean.getDirectors()));
+        tvOneCasts.setText(StringFormatUtil.formatName(subjectsBean.getCasts()));
+        tvOneGenres.setText("类型:" + StringFormatUtil.formatGenres(subjectsBean.getGenres()));
+    }
+
     private void initView() {
+        imgItemBg = (ImageView) findViewById(R.id.img_item_bg);
+        imgOnePhoto = (ImageView) findViewById(R.id.iv_one_photo);
+        tvOneRattingRate = (TextView) findViewById(R.id.tv_one_rating_rate);
+        tvOneRatingNumber = (TextView) findViewById(R.id.tv_one_rating_number);
+        tvOneDirector = (TextView) findViewById(R.id.tv_one_directors);
+        tvOneCasts = (TextView) findViewById(R.id.tv_one_casts);
+        tvOneGenres = (TextView) findViewById(R.id.tv_one_genres);
+
+        tvOneTitle = (TextView) findViewById(R.id.tv_one_title);
+        tvOneSummary = (TextView) findViewById(R.id.tv_one_summary);
+
         tvOneDay = (TextView) findViewById(R.id.tv_one_day);
         tvOneCity = (TextView) findViewById(R.id.tv_one_city);
         rvCast = (RecyclerView) findViewById(R.id.xrv_cast);
@@ -85,9 +138,13 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     }
 
-    protected void setSubTitle(CharSequence text) {
-        tbBaseTitle.setSubtitle(text);
+    protected void setTitles() {
+        Log.e("###", "setTitles: "+subjectsBean.getTitle() );
+        tbBaseTitle.setTitle(subjectsBean.getTitle());
+        tbBaseTitle.setSubtitle(String.format("主演：%s", StringFormatUtil.formatName(subjectsBean.getCasts())));
     }
+
+
 
     private void loadMovieDetail() {
         Subscription get = HttpUtils.getInstance().getMovieDetailClient().getMovieDetail(subjectsBean.getId())
@@ -112,6 +169,8 @@ public class MovieDetailActivity extends AppCompatActivity {
                         tvOneCity.setText(String.format("制片国家/地区：%s", StringFormatUtil.formatGenres
                                 (movieDetailBean.getCountries())));
 
+                        tvOneTitle.setText(StringFormatUtil.formatGenres(movieDetailBean.getAka()));
+                        tvOneSummary.setText(movieDetailBean.getSummary());
 
                         mMoreUrl = movieDetailBean.getAlt();
                         mMovieName = movieDetailBean.getTitle();
@@ -203,16 +262,19 @@ public class MovieDetailActivity extends AppCompatActivity {
      * 加载titlebar背景
      */
     private void setImgHeaderBg(String imgUrl) {
+        Log.e("###", "拿到的url" + imgUrl);
         if (!TextUtils.isEmpty(imgUrl)) {
 
             // 高斯模糊背景 原来 参数：12,5  23,4
             Glide.with(this).load(imgUrl)
+                   // .placeholder(R.drawable.stackblur_default)
                     .error(R.drawable.stackblur_default)
-                    .bitmapTransform(new BlurTransformation(this, 23, 4)).listener(new RequestListener<String,
-                    GlideDrawable>() {
+                    .bitmapTransform(new BlurTransformation(this, 23, 4))
+                    .listener(new RequestListener<String,GlideDrawable>() {
                 @Override
                 public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean
                         isFirstResource) {
+                    e.printStackTrace();
                     return false;
                 }
 
@@ -351,6 +413,64 @@ public class MovieDetailActivity extends AppCompatActivity {
         mAdapter.addAll(movieDetailBean.getCasts());
         rvCast.setAdapter(mAdapter);
     }
+
+
+    /**
+     * 设置自定义 Shared Element切换动画
+     * 默认不开启曲线路径切换动画，
+     * 开启需要重写setHeaderPicView()，和调用此方法并将isShow值设为true
+     *
+     * @param imageView 共享的图片
+     * @param isShow    是否显示曲线动画
+     */
+    protected void setMotion(ImageView imageView, boolean isShow) {
+        if (!isShow) {
+            return;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //定义ArcMotion
+            ArcMotion arcMotion = new ArcMotion();
+            arcMotion.setMinimumHorizontalAngle(50f);
+            arcMotion.setMinimumVerticalAngle(50f);
+            //插值器，控制速度
+            Interpolator interpolator = AnimationUtils.loadInterpolator(this, android.R.interpolator.fast_out_slow_in);
+
+            //实例化自定义的ChangeBounds
+            CustomChangeBounds changeBounds = new CustomChangeBounds();
+            changeBounds.setPathMotion(arcMotion);
+            changeBounds.setInterpolator(interpolator);
+            changeBounds.addTarget(imageView);
+            //将切换动画应用到当前的Activity的进入和返回
+            getWindow().setSharedElementEnterTransition(changeBounds);
+            getWindow().setSharedElementReturnTransition(changeBounds);
+        }
+    }
+
+    /**
+     * 设置toolbar
+     */
+    protected void setToolBar() {
+        setSupportActionBar(tbBaseTitle);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            //去除默认Title显示
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.icon_back);
+        }
+        // 手动设置才有效果
+        tbBaseTitle.setTitleTextAppearance(this, R.style.ToolBar_Title);
+        tbBaseTitle.setSubtitleTextAppearance(this, R.style.Toolbar_SubTitle);
+        tbBaseTitle.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.actionbar_more));
+        tbBaseTitle.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+    }
+
 
     /**
      * @param context      activity
