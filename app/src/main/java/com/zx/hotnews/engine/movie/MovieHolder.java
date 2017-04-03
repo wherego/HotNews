@@ -15,6 +15,8 @@ import com.zx.hotnews.R;
  */
 
 public class MovieHolder extends RecyclerView.ViewHolder {
+    View itemView;
+
     LinearLayout movieItem;
     ImageView moviePic;
     TextView movieName;
@@ -25,6 +27,7 @@ public class MovieHolder extends RecyclerView.ViewHolder {
 
     public MovieHolder(View itemView) {
         super(itemView);
+        this.itemView = itemView;
         movieItem = (LinearLayout) itemView.findViewById(R.id.ll_one_item);
         moviePic = (ImageView) itemView.findViewById(R.id.iv_one_photo);
         movieName = (TextView) itemView.findViewById(R.id.tv_one_title);

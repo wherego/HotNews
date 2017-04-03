@@ -1,6 +1,7 @@
 package com.zx.hotnews.http;
 
 import com.zx.hotnews.bean.movie.HotMovieBean;
+import com.zx.hotnews.bean.movie.MovieDetailBean;
 import com.zx.hotnews.bean.news.AndroidNewsBean;
 import com.zx.hotnews.bean.picture.PictureBean;
 
@@ -40,4 +41,13 @@ public interface Api {
      */
     @GET("v2/movie/in_theaters")
     Observable<HotMovieBean> getHotMovie();
+
+
+    /**
+     * 获取电影详情
+     *
+     * @param id 电影bean里的id
+     */
+    @GET("/v2/movie/subject/{id}")
+    Observable<MovieDetailBean> getMovieDetail(@Path("id") String id);
 }

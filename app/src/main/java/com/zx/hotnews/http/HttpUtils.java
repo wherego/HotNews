@@ -16,10 +16,12 @@ public class HttpUtils {
     private static final String API_ANDROIDNEWS = "http://gank.io/api/data/Android/";
     private static final String API_PICTURE =     "http://gank.io/api/data/福利/";
     private static final String API_MOVIEW = "https://api.douban.com/";
+    private final static String API_MOVIEW_DETAILE = "https://api.douban.com";
 
     private static Api AndroidNewClient;
     private static Api PictureClient;
     private static Api MovieClient;
+    private static Api MovieDetailClient;
     private static HttpUtils sHttpUtils;  //用一个单利吧...
 
 
@@ -78,6 +80,17 @@ public class HttpUtils {
         return MovieClient;
     }
 
+    public Api getMovieDetailClient() {
+        if (MovieDetailClient == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(API_MOVIEW_DETAILE)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .build();
+            MovieDetailClient = retrofit.create(Api.class);
+        }
+        return MovieDetailClient;
+    }
 
     public void setContext(Context context) {
         this.context = context;

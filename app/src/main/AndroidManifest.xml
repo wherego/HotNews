@@ -38,10 +38,11 @@
             android:name=".engine.movie.MovieActivity"
             android:launchMode="singleTask">
         </activity>
-
         <activity android:name=".engine.picture.DetailPictureActivity">
         </activity>
         <activity android:name=".engine.WebViewActivity">
+        </activity>
+        <activity android:name=".engine.movie.MovieDetailActivity">
         </activity>
     </application>
 

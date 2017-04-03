@@ -20,7 +20,8 @@
             android:layout_height="132dp"
             android:layout_marginRight="12dp"
             android:background="@color/colorPageBg"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY"
+            android:transitionName="transition_movie_img"/>
         <!--android:defaultPicType="@{0}"-->
         <!--android:displayFadeImage="@{subjectsBean.images.large}"-->
 
