@@ -116,6 +116,15 @@ public class MovieDetailActivity extends AppCompatActivity {
         tvOneDirector.setText(StringFormatUtil.formatName(subjectsBean.getDirectors()));
         tvOneCasts.setText(StringFormatUtil.formatName(subjectsBean.getCasts()));
         tvOneGenres.setText("类型:" + StringFormatUtil.formatGenres(subjectsBean.getGenres()));
+
+        // "23":模糊度；"4":图片缩放4倍后再进行模糊
+        Glide.with(this)
+                .load(subjectsBean.getImages().getMedium())
+                .error(R.drawable.stackblur_default)
+                .placeholder(R.drawable.stackblur_default)
+                .crossFade(500)
+                .bitmapTransform(new BlurTransformation(this, 23, 4))
+                .into(imgItemBg);
     }
 
     private void initView() {
@@ -139,11 +148,10 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     protected void setTitles() {
-        Log.e("###", "setTitles: "+subjectsBean.getTitle() );
+        Log.e("###", "setTitles: " + subjectsBean.getTitle());
         tbBaseTitle.setTitle(subjectsBean.getTitle());
         tbBaseTitle.setSubtitle(String.format("主演：%s", StringFormatUtil.formatName(subjectsBean.getCasts())));
     }
-
 
 
     private void loadMovieDetail() {
@@ -456,12 +464,12 @@ public class MovieDetailActivity extends AppCompatActivity {
             //去除默认Title显示
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.icon_back);
+//            actionBar.setHomeAsUpIndicator(R.drawable.icon_back);
         }
         // 手动设置才有效果
         tbBaseTitle.setTitleTextAppearance(this, R.style.ToolBar_Title);
         tbBaseTitle.setSubtitleTextAppearance(this, R.style.Toolbar_SubTitle);
-        tbBaseTitle.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.actionbar_more));
+//        tbBaseTitle.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.actionbar_more));
         tbBaseTitle.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
